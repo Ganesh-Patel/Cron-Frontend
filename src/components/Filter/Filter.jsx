@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './Filter.css';
 import { FaCloudDownloadAlt } from "react-icons/fa";
 import { IoFilterSharp } from "react-icons/io5";
+import {createTask} from '../../utils/api'
 function Filter() {
   const [showForm, setShowForm] = useState(false); // State to toggle form visibility
   const [taskData, setTaskData] = useState({
@@ -22,23 +23,18 @@ function Filter() {
       [name]: value,
     }));
   };
-
   // Function to handle task creation
   async function create() {
     const cronExpression = `${taskData.minute} ${taskData.hour} ${taskData.dayOfMonth} ${taskData.month} ${taskData.dayOfWeek}`;
+    const newTask={
+      name:taskData.name,
+      schedule:cronExpression,
+      email:taskData.email,
+      message:"This is Auto generated message",
+      expiration:"" 
+      }
     
-    const res = await fetch('http://localhost:3000/tasks', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        name: taskData.name,
-        email: taskData.email,
-        schedule: cronExpression, // Cron expression created from form input
-      }),
-    });
-
+    const res = await createTask(newTask);
     if (res.ok) {
       // Reset the form data and close the form after submission
       setTaskData({

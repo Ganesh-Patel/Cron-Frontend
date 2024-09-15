@@ -2,14 +2,17 @@ import React, { useEffect, useState } from 'react';
 import './Table.css';
 import { TiTick } from "react-icons/ti";
 import { ImCross } from "react-icons/im";
+import {getTasks,updateTask,deleteTask} from "../../utils/api"
 function Table() {
   const [data, setData] = useState([]);
 
   async function fetchData() {
     try {
-      const res = await fetch('http://localhost:3000/tasks');
-      const datas = await res.json();
-      setData(datas);
+      const res = await getTasks();
+      console.log("response from getAlltask",res)
+      const datas = res[0];
+      console.log('data',datas)
+      setData(res);
     } catch (error) {
       console.log(error);
     }
